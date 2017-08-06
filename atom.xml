@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://51explore.com/"/>
-  <updated>2017-08-04T13:47:34.000Z</updated>
+  <updated>2017-08-06T12:16:57.000Z</updated>
   <id>http://51explore.com/</id>
   
   <author>
@@ -14,6 +14,53 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android列表List多选何单选实现</title>
+    <link href="http://51explore.com/2017/08/06/Android%E5%88%97%E8%A1%A8List%E5%A4%9A%E9%80%89%E4%BD%95%E5%8D%95%E9%80%89%E5%AE%9E%E7%8E%B0/"/>
+    <id>http://51explore.com/2017/08/06/Android列表List多选何单选实现/</id>
+    <published>2017-08-06T12:01:11.000Z</published>
+    <updated>2017-08-06T12:16:57.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>   最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。<br>下面让我们 一起去看一下。<br>  *CheckedTextView（可以参考代码）,一般情况下，我们会用textView何CheckBox拼装起来 使用。其实在api里面有一个类 CheckedTextView，可以帮我们实现这个效果，并且通过设置参数，来决定 是 单选列表 还是多选列表 </p>
+<pre><code>   * 单选列表设置：
+    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+   * 多选列表设置：
+    listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+   * 在布局文件里展示 checkbox:
+    android:checkMark=&quot;?android:attr/listChoiceIndicatorMultiple&quot;
+   * 在布局文件里展示 radiobutton:
+    android:checkMark=&quot;?android:attr/listChoiceIndicatorSingle&quot;
+   * 有的时候 ui设计师给我们的效果图，选择框（checkbox在 列表的左侧），在这里就要用到 下面的 参数了
+     android:drawableLeft=&quot;?android:attr/listChoiceIndicatorSingle&quot;
+     android:drawableLeft=&quot;?android:attr/listChoiceIndicatorMultiple&quot;
+
+   * 这里需要注意一个 api的兼容性问题：
+    下面 参数 需要最低版本 是api17
+    android:paddingStart=&quot;?android:attr/listPreferredItemPaddingStart&quot;     android:paddingEnd=&quot;?android:attr/listPreferredItemPaddingEnd&quot;
+   * 如果，您的项目最低版本是 15 （大部分的项目设置），要用一下设置
+    android:paddingLeft
+    android:paddingRight
+
+listActivity 参考api里面的listActivity实现，继承AppCompatActivity。分别实现 activity生命周期的 几个方法：
+    onRestoreInstanceState
+    onContentChanged
+    onContentChanged()是Activity中的一个回调方法
+    当Activity的布局改动时，即setContentView()或者addContentView()方法执行完毕时就会调用该方法 
+</code></pre><p><em>列表数据的 初始化 和 获取，请参考demo 代码<br>demo里面的列表 是 用listview实现！如果有时间 可以替换为 RecycleView
+</em><a href="https://github.com/zjiayingok/ListSelectDemo-master" target="_blank" rel="external">demo下载地址：</a></p>
+<p>各位大神多提 意见 后期还会维护</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;   最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。&lt;br&gt;下面让我们 一起去看一下。&lt;br&gt;  *CheckedTextVie
+    
+    </summary>
+    
+    
+      <category term="多选列表 单选列表 Android List CheckBox RadioButton CheckedTextView" scheme="http://51explore.com/tags/%E5%A4%9A%E9%80%89%E5%88%97%E8%A1%A8-%E5%8D%95%E9%80%89%E5%88%97%E8%A1%A8-Android-List-CheckBox-RadioButton-CheckedTextView/"/>
+    
+  </entry>
   
   <entry>
     <title>正确的定位自己</title>
