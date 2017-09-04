@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://51explore.com">
   <title>Android列表List多选何单选实现 | 生而知之，困而知之</title>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <meta name="description" content="最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。下面让我们 一起去看一下。  *CheckedTextView（可以参考代码）,一般情况下，我们会用textView何CheckBox拼装起来 使用。其实在api里面有一个类 CheckedTextVi">
+  <meta name="description" content="最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。">
 <meta name="keywords" content="多选列表 单选列表 Android List CheckBox RadioButton CheckedTextView">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android列表List多选何单选实现">
 <meta property="og:url" content="http://51explore.com/2017/08/06/Android列表List多选何单选实现/index.html">
 <meta property="og:site_name" content="生而知之，困而知之">
-<meta property="og:description" content="最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。下面让我们 一起去看一下。  *CheckedTextView（可以参考代码）,一般情况下，我们会用textView何CheckBox拼装起来 使用。其实在api里面有一个类 CheckedTextVi">
+<meta property="og:description" content="最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。">
 <meta property="og:locale" content="汉语">
-<meta property="og:updated_time" content="2017-08-06T12:16:57.000Z">
+<meta property="og:updated_time" content="2017-09-04T04:58:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android列表List多选何单选实现">
-<meta name="twitter:description" content="最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。下面让我们 一起去看一下。  *CheckedTextView（可以参考代码）,一般情况下，我们会用textView何CheckBox拼装起来 使用。其实在api里面有一个类 CheckedTextVi">
+<meta name="twitter:description" content="最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。">
   
     <link rel="alternative" href="/atom.xml" title="生而知之，困而知之" type="application/atom+xml">
   
@@ -178,7 +178,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>   最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。<br>下面让我们 一起去看一下。<br>  *CheckedTextView（可以参考代码）,一般情况下，我们会用textView何CheckBox拼装起来 使用。其实在api里面有一个类 CheckedTextView，可以帮我们实现这个效果，并且通过设置参数，来决定 是 单选列表 还是多选列表 </p>
+        <p>   最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。<br><a id="more"></a><br>下面让我们 一起去看一下。<br>  *CheckedTextView（可以参考代码）,一般情况下，我们会用textView何CheckBox拼装起来 使用。其实在api里面有一个类 CheckedTextView，可以帮我们实现这个效果，并且通过设置参数，来决定 是 单选列表 还是多选列表 </p>
 <pre><code>   * 单选列表设置：
     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
    * 多选列表设置：
@@ -304,6 +304,15 @@ listActivity 参考api里面的listActivity实现，继承AppCompatActivity。�
 
   <nav id="article-nav">
   
+    <a href="/2017/09/04/EventBus详解和使用/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          EventBus详解和使用
+        
+      </div>
+    </a>
+  
   
     <a href="/2017/08/04/正确的定位自己/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">正确的定位自己</div>
@@ -417,6 +426,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">多选列表 单选列表 Android List CheckBox RadioButton CheckedTextView</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">EventBus 事件总线 android 发消息 解耦</a>
               </li>
             
             <div class="clearfix"></div>

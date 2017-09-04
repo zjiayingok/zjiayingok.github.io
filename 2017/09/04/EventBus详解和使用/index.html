@@ -6,18 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://51explore.com">
-  <title>Archives | 生而知之，困而知之</title>
+  <title>EventBus详解和使用 | 生而知之，困而知之</title>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <meta name="description" content="android ios java js h5 php go c c++ swift shell linux">
-<meta property="og:type" content="website">
-<meta property="og:title" content="生而知之，困而知之">
-<meta property="og:url" content="http://51explore.com/archives/index.html">
+  <meta name="description" content="EventBus是一款针对Android优化的发布/订阅事件总线。  特点: 主要功能是替代Intent,Handler,BroadCast在Fragment，Activity，Service，线程之间传递消息。 优点: 优点是开销小，代码更优雅。以及将发送者和接收者解耦。">
+<meta name="keywords" content="EventBus 事件总线 android 发消息 解耦">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EventBus详解和使用">
+<meta property="og:url" content="http://51explore.com/2017/09/04/EventBus详解和使用/index.html">
 <meta property="og:site_name" content="生而知之，困而知之">
-<meta property="og:description" content="android ios java js h5 php go c c++ swift shell linux">
+<meta property="og:description" content="EventBus是一款针对Android优化的发布/订阅事件总线。  特点: 主要功能是替代Intent,Handler,BroadCast在Fragment，Activity，Service，线程之间传递消息。 优点: 优点是开销小，代码更优雅。以及将发送者和接收者解耦。">
 <meta property="og:locale" content="汉语">
+<meta property="og:updated_time" content="2017-09-04T05:09:21.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="生而知之，困而知之">
-<meta name="twitter:description" content="android ios java js h5 php go c c++ swift shell linux">
+<meta name="twitter:title" content="EventBus详解和使用">
+<meta name="twitter:description" content="EventBus是一款针对Android优化的发布/订阅事件总线。  特点: 主要功能是替代Intent,Handler,BroadCast在Fragment，Activity，Service，线程之间传递消息。 优点: 优点是开销小，代码更优雅。以及将发送者和接收者解耦。">
   
     <link rel="alternative" href="/atom.xml" title="生而知之，困而知之" type="application/atom+xml">
   
@@ -160,25 +162,149 @@
             <canvas data-colors="#eaeaea" data-sectionheight="100" data-contentid="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
+            <article id="post-EventBus详解和使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/09/04/EventBus详解和使用/" class="archive-article-date">
+      <header class="article-header">
+        <h1 class="article-title" itemprop="name">
+      EventBus详解和使用
+    </h1>
+        
+        <a href="/2017/09/04/EventBus详解和使用/" class="archive-article-date">
   	<time datetime="2017-09-04T05:00:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-04</time>
 </a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>EventBus</strong>是一款针对Android优化的发布/订阅事件总线。</p>
+<ul>
+<li><strong>特点</strong>: 主要功能是替代Intent,Handler,BroadCast在Fragment，Activity，Service，线程之间传递消息。</li>
+<li><strong>优点</strong>: 优点是开销小，代码更优雅。以及将发送者和接收者解耦。<a id="more"></a>
+</li>
+</ul>
+<h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><pre><code>/**
+ * eventBus 注册
+ * 子类可实现 该方法
+ */
+public void registerComponent() {}
+
+/**
+ * eventBus 注销
+ * 子类可实现 该方法
+ */
+public void unRegisterComponent() {}
+</code></pre><ul>
+<li><strong>作用</strong>: 在子类activity和fragment 中实现该方法，不用关心 注册、注释和其生命周期的关系</li>
+</ul>
+<h3 id="流程图-BaseActivity"><a href="#流程图-BaseActivity" class="headerlink" title="流程图:BaseActivity"></a>流程图:BaseActivity</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">st=&gt;start: onCreate</div><div class="line">e=&gt;end</div><div class="line">op=&gt;operation: registerComponent</div><div class="line">st-&gt;op-&gt;cond</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">st=&gt;start: onDestroy</div><div class="line">e=&gt;end</div><div class="line">op=&gt;operation: unRegisterComponent</div><div class="line">st-&gt;op-&gt;cond</div></pre></td></tr></table></figure>
+<p>###时序图:子类activity</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">A-&gt;B: post(event)</div><div class="line">Note right of B: 互相发送消息</div><div class="line">B--&gt;A: post(event)</div></pre></td></tr></table></figure>
+<h3 id="代码块：发送事件"><a href="#代码块：发送事件" class="headerlink" title="代码块：发送事件"></a>代码块：发送事件</h3><pre><code>CustomerBusEvent customerBusEvent = new  CustomerBusEvent(CustomerBusEvent.ACTION_CUSTOMER_NAME_STRING);
+            customerBusEvent.setCustomerName(&quot;设置客户名称消息&quot;);
+            BusProvider.getInstance().postSticky(customerBusEvent);
+</code></pre><blockquote>
+<p><strong>注意：</strong>postSticky(event)是发送粘性事件，大部分情况下使用post(event)</p>
+</blockquote>
+<h3 id="代码块：接收事件"><a href="#代码块：接收事件" class="headerlink" title="代码块：接收事件"></a>代码块：接收事件</h3><pre><code> /**
+ * 不管从哪个线程发出的事件，MAIN模式都会在UI（主线程）线程执行onMessageEventMain()方法， 在这里可以更新UI的操作，不可以执行耗时的操作
+ * @param backBusEvent
+ */
+@Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
+public void updateButton(BackBusEvent backBusEvent){
+    if(backBusEvent != null){
+        String action = backBusEvent.getAction();
+        if(TextUtils.isEmpty(action)){
+            return;
+        }
+
+        Log.d(&quot;++++++运行在Button哪个线程：&quot;,Thread.currentThread().getName());
+        if(action.equals(BackBusEvent.ACTION_CUSTOMER_NAME_BACK)){
+            btn_customer.setText(backBusEvent.getCustomerNameBack());
+        }else if(action.equals(BackBusEvent.ACTION_BUSINESS_NAME_BACK)){
+            btn_business.setText(backBusEvent.getBusinessNameBack());
+        }
+    }
+}
+
+/**
+ * 不管从哪个线程发出的事件，ASYNC模式都会创建一个新的子线程来执行onEventAsync()方法，所以在这里不能执行更新UI的操作，可以执行耗时的操作
+ * @param backBusEvent
+ */
+@Subscribe(threadMode = ThreadMode.ASYNC, priority = 4)
+public void updateUI(BackBusEvent backBusEvent){
+    if(backBusEvent != null){
+        String action = backBusEvent.getAction();
+        if(TextUtils.isEmpty(action)){
+            return;
+        }
+
+        Log.d(&quot;++++++运行在updateUI哪个线程：&quot;,Thread.currentThread().getName());
+        if(action.equals(BackBusEvent.ACTION_CUSTOMER_NAME_BACK)){
+            btn_customer.setText(backBusEvent.getCustomerNameBack());
+        }else if(action.equals(BackBusEvent.ACTION_BUSINESS_NAME_BACK)){
+            btn_business.setText(backBusEvent.getBusinessNameBack());
+        }
+    }
+}
+
+/**
+ * 事件从哪个线程发布出来的，onMessageEventPost()方法就会在该线程中运行， 如果发送事件的线程是UI线程，则在UI线程执行， 如果发送事件的线程是子线程，则在该子线程中执行
+ * @param backBusEvent
+ */
+@Subscribe(threadMode = ThreadMode.POSTING, priority = 2,sticky = true)
+public void updateMethod(BackBusEvent backBusEvent){
+    if(backBusEvent != null){
+        String action = backBusEvent.getAction();
+        if(TextUtils.isEmpty(action)){
+            return;
+        }
+
+        Log.d(&quot;++++++运行在Method哪个线程：&quot;,Thread.currentThread().getName());
+        if(action.equals(BackBusEvent.ACTION_CUSTOMER_NAME_BACK)){
+            btn_customer.setText(backBusEvent.getCustomerNameBack());
+        }else if(action.equals(BackBusEvent.ACTION_BUSINESS_NAME_BACK)){
+            btn_business.setText(backBusEvent.getBusinessNameBack());
+        }
+    }
+}
+</code></pre><ul>
+<li><strong>讲解：</strong>从上面的代码，我们可以看到，EventBus是怎么接收消息的，是根据参数中类的实例的类型的判定的，所以当如果我们在接收时，同一个类的实例参数有两个函数来接收会怎样？答案是，这两个函数都会执行。<br>   我定义了 3个event</li>
+</ul>
+<p>###priority事件优先级<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//priority越大，级别越高</span></div><div class="line"> <span class="meta">@Subscribe</span>(priority = <span class="number">1</span>);</div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEvent</span><span class="params">(MessageEvent event)</span> </span>&#123;</div><div class="line"> …</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>###混淆<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-keepattributes *Annotation*</div><div class="line">-keepclassmembers <span class="class"><span class="keyword">class</span> ** </span>&#123;</div><div class="line">    <span class="meta">@org</span>.greenrobot.eventbus.Subscribe &lt;methods&gt;;</div><div class="line">&#125;</div><div class="line">-keep <span class="keyword">enum</span> org.greenrobot.eventbus.ThreadMode &#123; *; &#125;</div><div class="line">#Only required if you use AsyncExecutor</div><div class="line">-keepclassmembers <span class="class"><span class="keyword">class</span> * <span class="keyword">extends</span> <span class="title">org</span>.<span class="title">greenrobot</span>.<span class="title">eventbus</span>.<span class="title">util</span>.<span class="title">ThrowableFailureEvent</span> </span>&#123;</div><div class="line">    &lt;init&gt;(java.lang.Throwable);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>###总结：<br>EventBus的耦合太低了，如果不加以控制管理，你会不知道，你发的消息到跑哪里去了。也不知道你的这条消息，会在哪里发出。</p>
+<p>###建议：<br>不同的业务模块一定要作为一个事件封装，具体需要考虑业务情景跟代码情况，比如事件行为不同、事件生命周期不同，如果有必要，写封装成两个Event可能是更好的选择。比如：客户模块 写一个CustomerBusEvent、生意模块 写一个 BusinessBusEvent</p>
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-    	 <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/04/EventBus详解和使用/">EventBus详解和使用</a>
-    </h1>
-        <div class="article-info info-on-right">
-          <div class="article-tag tagcloud">
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
@@ -188,68 +314,90 @@
       		
 		</ul>
 	</div>
-          
+      
+      
+
+      
+        <div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://51explore.com/2017/09/04/EventBus详解和使用/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/06/Android列表List多选何单选实现/" class="archive-article-date">
-  	<time datetime="2017-08-06T12:01:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-06</time>
-</a>
-        </div>
-    	 <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/06/Android列表List多选何单选实现/">Android列表List多选何单选实现</a>
-    </h1>
-        <div class="article-info info-on-right">
-          <div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">多选列表 单选列表 Android List CheckBox RadioButton CheckedTextView</a>
-        		</li>
-      		
-		</ul>
-	</div>
-          
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/04/正确的定位自己/" class="archive-article-date">
-  	<time datetime="2017-08-03T23:23:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-04</time>
-</a>
-        </div>
-    	 <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/04/正确的定位自己/">正确的定位自己</a>
-    </h1>
-        <div class="article-info info-on-right">
-          
-          
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
+  <nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2017/08/06/Android列表List多选何单选实现/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android列表List多选何单选实现</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
           </div>
         </div>
       </div>
@@ -272,8 +420,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

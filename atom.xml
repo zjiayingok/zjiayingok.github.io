@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://51explore.com/"/>
-  <updated>2017-08-06T12:16:57.000Z</updated>
+  <updated>2017-09-04T05:09:21.000Z</updated>
   <id>http://51explore.com/</id>
   
   <author>
@@ -16,13 +16,134 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>EventBus详解和使用</title>
+    <link href="http://51explore.com/2017/09/04/EventBus%E8%AF%A6%E8%A7%A3%E5%92%8C%E4%BD%BF%E7%94%A8/"/>
+    <id>http://51explore.com/2017/09/04/EventBus详解和使用/</id>
+    <published>2017-09-04T05:00:01.000Z</published>
+    <updated>2017-09-04T05:09:21.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>EventBus</strong>是一款针对Android优化的发布/订阅事件总线。</p>
+<ul>
+<li><strong>特点</strong>: 主要功能是替代Intent,Handler,BroadCast在Fragment，Activity，Service，线程之间传递消息。</li>
+<li><strong>优点</strong>: 优点是开销小，代码更优雅。以及将发送者和接收者解耦。<a id="more"></a>
+</li>
+</ul>
+<h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><pre><code>/**
+ * eventBus 注册
+ * 子类可实现 该方法
+ */
+public void registerComponent() {}
+
+/**
+ * eventBus 注销
+ * 子类可实现 该方法
+ */
+public void unRegisterComponent() {}
+</code></pre><ul>
+<li><strong>作用</strong>: 在子类activity和fragment 中实现该方法，不用关心 注册、注释和其生命周期的关系</li>
+</ul>
+<h3 id="流程图-BaseActivity"><a href="#流程图-BaseActivity" class="headerlink" title="流程图:BaseActivity"></a>流程图:BaseActivity</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">st=&gt;start: onCreate</div><div class="line">e=&gt;end</div><div class="line">op=&gt;operation: registerComponent</div><div class="line">st-&gt;op-&gt;cond</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">st=&gt;start: onDestroy</div><div class="line">e=&gt;end</div><div class="line">op=&gt;operation: unRegisterComponent</div><div class="line">st-&gt;op-&gt;cond</div></pre></td></tr></table></figure>
+<p>###时序图:子类activity</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">A-&gt;B: post(event)</div><div class="line">Note right of B: 互相发送消息</div><div class="line">B--&gt;A: post(event)</div></pre></td></tr></table></figure>
+<h3 id="代码块：发送事件"><a href="#代码块：发送事件" class="headerlink" title="代码块：发送事件"></a>代码块：发送事件</h3><pre><code>CustomerBusEvent customerBusEvent = new  CustomerBusEvent(CustomerBusEvent.ACTION_CUSTOMER_NAME_STRING);
+            customerBusEvent.setCustomerName(&quot;设置客户名称消息&quot;);
+            BusProvider.getInstance().postSticky(customerBusEvent);
+</code></pre><blockquote>
+<p><strong>注意：</strong>postSticky(event)是发送粘性事件，大部分情况下使用post(event)</p>
+</blockquote>
+<h3 id="代码块：接收事件"><a href="#代码块：接收事件" class="headerlink" title="代码块：接收事件"></a>代码块：接收事件</h3><pre><code> /**
+ * 不管从哪个线程发出的事件，MAIN模式都会在UI（主线程）线程执行onMessageEventMain()方法， 在这里可以更新UI的操作，不可以执行耗时的操作
+ * @param backBusEvent
+ */
+@Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
+public void updateButton(BackBusEvent backBusEvent){
+    if(backBusEvent != null){
+        String action = backBusEvent.getAction();
+        if(TextUtils.isEmpty(action)){
+            return;
+        }
+
+        Log.d(&quot;++++++运行在Button哪个线程：&quot;,Thread.currentThread().getName());
+        if(action.equals(BackBusEvent.ACTION_CUSTOMER_NAME_BACK)){
+            btn_customer.setText(backBusEvent.getCustomerNameBack());
+        }else if(action.equals(BackBusEvent.ACTION_BUSINESS_NAME_BACK)){
+            btn_business.setText(backBusEvent.getBusinessNameBack());
+        }
+    }
+}
+
+/**
+ * 不管从哪个线程发出的事件，ASYNC模式都会创建一个新的子线程来执行onEventAsync()方法，所以在这里不能执行更新UI的操作，可以执行耗时的操作
+ * @param backBusEvent
+ */
+@Subscribe(threadMode = ThreadMode.ASYNC, priority = 4)
+public void updateUI(BackBusEvent backBusEvent){
+    if(backBusEvent != null){
+        String action = backBusEvent.getAction();
+        if(TextUtils.isEmpty(action)){
+            return;
+        }
+
+        Log.d(&quot;++++++运行在updateUI哪个线程：&quot;,Thread.currentThread().getName());
+        if(action.equals(BackBusEvent.ACTION_CUSTOMER_NAME_BACK)){
+            btn_customer.setText(backBusEvent.getCustomerNameBack());
+        }else if(action.equals(BackBusEvent.ACTION_BUSINESS_NAME_BACK)){
+            btn_business.setText(backBusEvent.getBusinessNameBack());
+        }
+    }
+}
+
+/**
+ * 事件从哪个线程发布出来的，onMessageEventPost()方法就会在该线程中运行， 如果发送事件的线程是UI线程，则在UI线程执行， 如果发送事件的线程是子线程，则在该子线程中执行
+ * @param backBusEvent
+ */
+@Subscribe(threadMode = ThreadMode.POSTING, priority = 2,sticky = true)
+public void updateMethod(BackBusEvent backBusEvent){
+    if(backBusEvent != null){
+        String action = backBusEvent.getAction();
+        if(TextUtils.isEmpty(action)){
+            return;
+        }
+
+        Log.d(&quot;++++++运行在Method哪个线程：&quot;,Thread.currentThread().getName());
+        if(action.equals(BackBusEvent.ACTION_CUSTOMER_NAME_BACK)){
+            btn_customer.setText(backBusEvent.getCustomerNameBack());
+        }else if(action.equals(BackBusEvent.ACTION_BUSINESS_NAME_BACK)){
+            btn_business.setText(backBusEvent.getBusinessNameBack());
+        }
+    }
+}
+</code></pre><ul>
+<li><strong>讲解：</strong>从上面的代码，我们可以看到，EventBus是怎么接收消息的，是根据参数中类的实例的类型的判定的，所以当如果我们在接收时，同一个类的实例参数有两个函数来接收会怎样？答案是，这两个函数都会执行。<br>   我定义了 3个event</li>
+</ul>
+<p>###priority事件优先级<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//priority越大，级别越高</span></div><div class="line"> <span class="meta">@Subscribe</span>(priority = <span class="number">1</span>);</div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEvent</span><span class="params">(MessageEvent event)</span> </span>&#123;</div><div class="line"> …</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>###混淆<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">-keepattributes *Annotation*</div><div class="line">-keepclassmembers <span class="class"><span class="keyword">class</span> ** </span>&#123;</div><div class="line">    <span class="meta">@org</span>.greenrobot.eventbus.Subscribe &lt;methods&gt;;</div><div class="line">&#125;</div><div class="line">-keep <span class="keyword">enum</span> org.greenrobot.eventbus.ThreadMode &#123; *; &#125;</div><div class="line">#Only required if you use AsyncExecutor</div><div class="line">-keepclassmembers <span class="class"><span class="keyword">class</span> * <span class="keyword">extends</span> <span class="title">org</span>.<span class="title">greenrobot</span>.<span class="title">eventbus</span>.<span class="title">util</span>.<span class="title">ThrowableFailureEvent</span> </span>&#123;</div><div class="line">    &lt;init&gt;(java.lang.Throwable);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>###总结：<br>EventBus的耦合太低了，如果不加以控制管理，你会不知道，你发的消息到跑哪里去了。也不知道你的这条消息，会在哪里发出。</p>
+<p>###建议：<br>不同的业务模块一定要作为一个事件封装，具体需要考虑业务情景跟代码情况，比如事件行为不同、事件生命周期不同，如果有必要，写封装成两个Event可能是更好的选择。比如：客户模块 写一个CustomerBusEvent、生意模块 写一个 BusinessBusEvent</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;EventBus&lt;/strong&gt;是一款针对Android优化的发布/订阅事件总线。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;特点&lt;/strong&gt;: 主要功能是替代Intent,Handler,BroadCast在Fragment，Activity，Service，线程之间传递消息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优点&lt;/strong&gt;: 优点是开销小，代码更优雅。以及将发送者和接收者解耦。
+    
+    </summary>
+    
+    
+      <category term="EventBus 事件总线 android 发消息 解耦" scheme="http://51explore.com/tags/EventBus-%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF-android-%E5%8F%91%E6%B6%88%E6%81%AF-%E8%A7%A3%E8%80%A6/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android列表List多选何单选实现</title>
     <link href="http://51explore.com/2017/08/06/Android%E5%88%97%E8%A1%A8List%E5%A4%9A%E9%80%89%E4%BD%95%E5%8D%95%E9%80%89%E5%AE%9E%E7%8E%B0/"/>
     <id>http://51explore.com/2017/08/06/Android列表List多选何单选实现/</id>
     <published>2017-08-06T12:01:11.000Z</published>
-    <updated>2017-08-06T12:16:57.000Z</updated>
+    <updated>2017-09-04T04:58:08.000Z</updated>
     
-    <content type="html"><![CDATA[<p>   最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。<br>下面让我们 一起去看一下。<br>  *CheckedTextView（可以参考代码）,一般情况下，我们会用textView何CheckBox拼装起来 使用。其实在api里面有一个类 CheckedTextView，可以帮我们实现这个效果，并且通过设置参数，来决定 是 单选列表 还是多选列表 </p>
+    <content type="html"><![CDATA[<p>   最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。<br><a id="more"></a><br>下面让我们 一起去看一下。<br>  *CheckedTextView（可以参考代码）,一般情况下，我们会用textView何CheckBox拼装起来 使用。其实在api里面有一个类 CheckedTextView，可以帮我们实现这个效果，并且通过设置参数，来决定 是 单选列表 还是多选列表 </p>
 <pre><code>   * 单选列表设置：
     listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
    * 多选列表设置：
@@ -53,7 +174,7 @@ listActivity 参考api里面的listActivity实现，继承AppCompatActivity。�
     
     <summary type="html">
     
-      &lt;p&gt;   最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。&lt;br&gt;下面让我们 一起去看一下。&lt;br&gt;  *CheckedTextVie
+      &lt;p&gt;   最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。&lt;br&gt;
     
     </summary>
     

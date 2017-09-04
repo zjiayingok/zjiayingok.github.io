@@ -160,7 +160,75 @@
             <canvas data-colors="#eaeaea" data-sectionheight="100" data-contentid="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Android列表List多选何单选实现" class="article article-type-post article-index" itemscope itemprop="blogPost">
+            <article id="post-EventBus详解和使用" class="article article-type-post article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/04/EventBus详解和使用/">EventBus详解和使用</a>
+    </h1>
+        
+        <a href="/2017/09/04/EventBus详解和使用/" class="archive-article-date">
+  	<time datetime="2017-09-04T05:00:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>EventBus</strong>是一款针对Android优化的发布/订阅事件总线。</p>
+<ul>
+<li><strong>特点</strong>: 主要功能是替代Intent,Handler,BroadCast在Fragment，Activity，Service，线程之间传递消息。</li>
+<li><strong>优点</strong>: 优点是开销小，代码更优雅。以及将发送者和接收者解耦。
+        
+          <a class="article-more-a" href="/2017/09/04/EventBus详解和使用/#more">more >></a>
+        
+      
+
+      
+    </li></ul></div>
+    <div class="article-info article-info-index">
+      
+      <div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">EventBus 事件总线 android 发消息 解耦</a>
+        		</li>
+      		
+		</ul>
+	</div>
+      
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/09/04/EventBus详解和使用/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+  
+    <article id="post-Android列表List多选何单选实现" class="article article-type-post article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -176,38 +244,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>   最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。<br>下面让我们 一起去看一下。<br>  *CheckedTextView（可以参考代码）,一般情况下，我们会用textView何CheckBox拼装起来 使用。其实在api里面有一个类 CheckedTextView，可以帮我们实现这个效果，并且通过设置参数，来决定 是 单选列表 还是多选列表 </p>
-<pre><code>   * 单选列表设置：
-    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-   * 多选列表设置：
-    listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-   * 在布局文件里展示 checkbox:
-    android:checkMark=&quot;?android:attr/listChoiceIndicatorMultiple&quot;
-   * 在布局文件里展示 radiobutton:
-    android:checkMark=&quot;?android:attr/listChoiceIndicatorSingle&quot;
-   * 有的时候 ui设计师给我们的效果图，选择框（checkbox在 列表的左侧），在这里就要用到 下面的 参数了
-     android:drawableLeft=&quot;?android:attr/listChoiceIndicatorSingle&quot;
-     android:drawableLeft=&quot;?android:attr/listChoiceIndicatorMultiple&quot;
-
-   * 这里需要注意一个 api的兼容性问题：
-    下面 参数 需要最低版本 是api17
-    android:paddingStart=&quot;?android:attr/listPreferredItemPaddingStart&quot;     android:paddingEnd=&quot;?android:attr/listPreferredItemPaddingEnd&quot;
-   * 如果，您的项目最低版本是 15 （大部分的项目设置），要用一下设置
-    android:paddingLeft
-    android:paddingRight
-
-listActivity 参考api里面的listActivity实现，继承AppCompatActivity。分别实现 activity生命周期的 几个方法：
-    onRestoreInstanceState
-    onContentChanged
-    onContentChanged()是Activity中的一个回调方法
-    当Activity的布局改动时，即setContentView()或者addContentView()方法执行完毕时就会调用该方法 
-</code></pre><p><em>列表数据的 初始化 和 获取，请参考demo 代码<br>demo里面的列表 是 用listview实现！如果有时间 可以替换为 RecycleView
-</em><a href="https://github.com/zjiayingok/ListSelectDemo-master" target="_blank" rel="external">demo下载地址：</a></p>
-<p>各位大神多提 意见 后期还会维护</p>
+        <p>   最近 在做项目中，遇到做一个多选列表的需求。无论是 久经沙场的撸主还是，初出茅庐的小鲜肉，都会在网上百度好多资料，去完成这个需求。其实，sdk里面有apidemo 完全可以帮我们解决这个问题。<br>
+        
+          <a class="article-more-a" href="/2017/08/06/Android列表List多选何单选实现/#more">more >></a>
+        
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       <div class="article-tag tagcloud">
@@ -395,6 +439,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">多选列表 单选列表 Android List CheckBox RadioButton CheckedTextView</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">EventBus 事件总线 android 发消息 解耦</a>
               </li>
             
             <div class="clearfix"></div>
